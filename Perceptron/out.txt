@@ -1,0 +1,6 @@
+Training Basic Perceptron classifier took 24 iterations to terminate.
+Accuracy of Basic = 100.0
+Training Reward & Punishment classifier took 514 iterations to terminate.
+Accuracy of RP = 100.0
+Pocket Perceptron classifier took 40 iterations to terminate.
+Accuracy of Pocket = 97.75
