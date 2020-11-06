@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from matplotlib import pyplot as plt
+from prettytable import PrettyTable
 
 class Utility:
     INPUT_REFERENCE_IMAGE = './reference.jpg'
@@ -166,12 +168,41 @@ def main():
     reference_image_matrix = Utility.get_reference_image()
     solver = Methods(vidcap, original_frame_matrices, grayscale_frame_matrices, reference_image_matrix)
     number_of_frames = len(original_frame_matrices)
-    print("p\t Exhaustive\t\t\t 2D Log\t\t\t    Hierarchical")
-    for p in range(5, 20 + 1):
+
+    exhaustive_list = []
+    logarithmic_list = []
+    hierarchical_list = []
+
+    p_start = 5
+    p_end = 20
+    for p in range(p_start, p_end + 1):
         exhaustive_search_counter = solver.execute_search(method = "exhaustive", p = p)
         logarithmic_search_counter = solver.execute_search(method = "2d_logarithmic", p = p)
         hierarchical_search_counter = solver.execute_search(method  = "hierarchical", p = p)
-        print(p, "\t", exhaustive_search_counter / number_of_frames, "\t", logarithmic_search_counter / number_of_frames, "\t\t", hierarchical_search_counter / number_of_frames)
+        exhaustive_list.append((p, exhaustive_search_counter / number_of_frames))
+        logarithmic_list.append((p, logarithmic_search_counter / number_of_frames))
+        hierarchical_list.append((p, hierarchical_search_counter / number_of_frames))
+
+    exhaustive_array = np.asarray(exhaustive_list)        
+    logarithmic_array = np.asarray(logarithmic_list)
+    hierarchical_array = np.asarray(hierarchical_list) 
+
+    plt.plot(exhaustive_array[:,0], exhaustive_array[:,1], "-b", label = "Exhaustive")
+    plt.plot(logarithmic_array[:,0], logarithmic_array[:,1], "-r", label = "2D Log")
+    plt.plot(hierarchical_array[:,0], hierarchical_array[:,1], "-g", label = "Hierarchical")
+
+    plt.xlabel('p', fontsize = 18)
+    plt.ylabel('frame search count', fontsize = 18)
+    plt.legend(loc = "upper left")
+
+    plt.show()
+
+    pretty_table = PrettyTable(['p', 'Exhaustive', '2D Log', 'Hierarchical'])
+    for i in range(len(exhaustive_array)):
+        pretty_table.add_row([exhaustive_array[i][0], exhaustive_array[i][1] , logarithmic_array[i][1], hierarchical_array[i][1]])
+        
+    with open('1505082_report.txt', 'w') as f:
+        f.write(pretty_table.get_string())
 
 if __name__ == "__main__":
     main()
