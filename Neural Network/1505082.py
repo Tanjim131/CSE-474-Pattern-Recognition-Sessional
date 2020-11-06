@@ -159,7 +159,6 @@ class NeuralNetwork:
         # matches = np.count_nonzero(predicted_classes == test_actual_class_values)
         # accuracy = matches / len(test_actual_class_values) * 100
         match_count = 0
-
         for i in range(len(test_actual_class_values)):
             if predicted_classes[i] == test_actual_class_values[i]:
                 match_count += 1
@@ -174,7 +173,7 @@ def main():
     number_of_features, number_of_classes, train_feature_vectors, train_actual_class_values = Utility.get_feature_vectors_and_actual_class_values("Train")
     test_feature_vectors, test_actual_class_values = Utility.get_feature_vectors_and_actual_class_values("Test")
 
-    nn = NeuralNetwork(number_of_features, number_of_classes, [3, 2, 5, 4, 10, 7])
+    nn = NeuralNetwork(number_of_features, number_of_classes, [3, 5, 4, 10, 7])
     nn.train_neural_network(train_feature_vectors, train_actual_class_values)
     accuracy = nn.test_neural_network(test_feature_vectors, test_actual_class_values)
     print(accuracy)
